@@ -1,8 +1,8 @@
-#目标
+# 目标
 简化tablestore（node）语法，采用键值对控制query
-#大纲
-##1.query
-###1.1 
+# 大纲
+## 1.query
+### 1.1 
 ```js
 db('db_name').get({
 	key://

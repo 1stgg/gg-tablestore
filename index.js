@@ -1,6 +1,5 @@
-// import account from './account.js'
-// import TableStore from 'tablestore'
 let TableStore = require('tablestore')
+const NodeCache = require( "node-cache" );
 global.db = require('./db.js')
 global.client = 0
 global.getClient = function (argument) {
@@ -10,6 +9,13 @@ global.getClient = function (argument) {
 	var client = new TableStore.Client(require('./account.js'));
 	global.client = client
 	return client
+}
+global.S = function (key,value) {
+	if(value === undefine){
+		NodeCache.get(key)
+	}else{
+		NodeCache.set(key,value)
+	}
 }
 var arg = process.argv.splice(2);
 console.log(13,arg)

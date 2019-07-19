@@ -1,8 +1,13 @@
 module.exports = async function a(argument) {
 	// console.log(2,db().creatTable)
-	return await db().creatTable({
-			name:'temp',
-			// key:[{name:'id',type:'INTEGER'}]
+	// console.log(3)
+	return await db().createTable({
+			name:'test',
+			key:[
+				{name:'id',type:'INTEGER'},
+				{name:'str',type:'STRING'},
+				{name:'bin',type:'BINARY'},
+			]
 			// index:{
 
 			// }

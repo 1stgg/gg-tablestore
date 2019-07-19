@@ -3,6 +3,7 @@ module.exports = {
 	createTable:'./table/createTable.js',
 	deleteTable:'./table/deleteTable.js',
 	listTable:'./table/listTable.js',
+	getTable:'./table/getTable.js',
 
 	//index
 	createIndex:'./table/index/createSearchIndex.js',

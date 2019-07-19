@@ -1,6 +1,7 @@
 let TableStore = require('tablestore')
 const NodeCache = require( "node-cache" );
 global.db = require('./db.js')
+global.gg = require('./gg_tool.js')
 global.client = 0
 global.getClient = function (argument) {
 	if(client){

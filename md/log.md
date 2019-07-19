@@ -7,3 +7,7 @@
 - c createIndex
 - c deleteIndex
 - c listIndex
+
+
+# 19-07-20
+- c c

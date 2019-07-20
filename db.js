@@ -1,5 +1,16 @@
+
+let default2 = require('./default.js')
 function obj(table) {
 	this.table = table
+	// this.index
+	// this.whereValue
+	this.limitValue = default2.limit
+	this.pageValue = default2.page
+	this.countValue = default2.count
+	// this.fieldValue
+
+	// this.searchQuery
+	// this.columnToGet
 }
 let fileList = require('./fileList.js')
 for(let key in fileList){

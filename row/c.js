@@ -21,17 +21,10 @@ module.exports = async function a(arg) {
 	let key_arr = []
 	for(let key in arg.key){
 		let item = arg.key[key]
-		// console.log(13.1,item)
-		// console.log(14,typeof(item))
 		switch(typeof(item)){
 		    case 'number' :
 		    	item = TableStore.Long.fromNumber(item)
 		        break
-		    // case 'object' :
-		    // 	key_arr.push({[key]:item})
-		    // 	console.log(22,item.toString('hex'))
-		    // 	console.log(23,item.toString('base64'))
-		    //     break
 		    default :
 		    	// key_arr.push({[key]:item})
 		        break

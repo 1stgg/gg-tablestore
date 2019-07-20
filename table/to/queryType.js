@@ -1,6 +1,7 @@
 let TableStore = require('tablestore')
-console.log(2,TableStore.FieldType)
+
 module.exports = function a(arg) {
+	arg += '_query'
 	let type = arg.toLocaleUpperCase()
-	return TableStore.FieldType[type]
+	return TableStore.QueryType[type]
 }

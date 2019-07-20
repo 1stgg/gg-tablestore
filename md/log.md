@@ -11,3 +11,7 @@
 
 # 19-07-20
 - c c
+
+- u createIndex (check and delete before create)
+- c where
+- c r 

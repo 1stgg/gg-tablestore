@@ -12,10 +12,26 @@ module.exports = async function a(arg) {
 			fieldType:indexFieldType(item.type)
 		})
 	}
-	// console.log(3,schema)
+	console.log(3,schema) 
+	let tableName=this.table
+  let	indexName=arg.name || this.table
+	let list = await client.listSearchIndex({
+  	tableName:tableName,
+	})
+	// console.log(198,list)
+	for(let key in list.indices){
+		let item = list.indices[key]
+		if(item.index_name == indexName){
+			let del = await client.deleteSearchIndex({
+		  	tableName:tableName,
+		  	indexName:indexName,
+			})
+			console.log(29,'deleteSearchIndex',del)
+		}
+	}
 	let re = await client.createSearchIndex({
-  	tableName:this.table,
-  	indexName:arg.name || this.table,
+  	tableName:tableName,
+  	indexName:indexName,
   	schema:schema
 	})
 	console.log(21,'createSearchIndex',re)

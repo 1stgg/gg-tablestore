@@ -12,6 +12,7 @@ module.exports = {
 
 	//curd
 	c:'./row/c.js',
+	u:'./row/u.js',
 	r:'./row/r.js',
 	where:'./row/where.js',
 }

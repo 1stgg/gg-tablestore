@@ -15,3 +15,5 @@
 - u createIndex (check and delete before create)
 - c where
 - c r 
+
+- c u

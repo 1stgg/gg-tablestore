@@ -14,5 +14,6 @@ module.exports = {
 	c:'./row/c.js',
 	u:'./row/u.js',
 	r:'./row/r.js',
+	d:'./row/d.js',
 	where:'./row/where.js',
 }

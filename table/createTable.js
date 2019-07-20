@@ -1,10 +1,19 @@
 module.exports = async function a(arg) {
 	let client = getClient()
 	// console.log(3,client)
+	let key_arr = []
+	for(let key in arg){
+		let item = arg[key]
+		key_arr.push({
+			name:key,
+			type:item,
+		})
+	}
+	console.log(11,key_arr)
 	let re = await client.createTable({
   	tableMeta: {
-    	tableName: arg.name,
-	    primaryKey: arg.key || [
+    	tableName: this.table,
+	    primaryKey: key_arr || [
 	      {
 	        name: 'id',
 	        type: 'INTEGER'

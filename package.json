@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/1stgg/gg-tablestore#readme",
   "dependencies": {
-    "node-cache": "^4.2.0",
     "tablestore": "^4.3.2"
   }
 }

@@ -1,4 +1,6 @@
 module.exports = {
+	//database
+	connect:'./connect.js',
 	//table
 	createTable:'./table/createTable.js',
 	deleteTable:'./table/deleteTable.js',
@@ -16,4 +18,6 @@ module.exports = {
 	r:'./row/r.js',
 	d:'./row/d.js',
 	where:'./row/where.js',
+
+
 }

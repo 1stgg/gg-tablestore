@@ -1,30 +1,51 @@
 let TableStore = require('tablestore')
-// const NodeCache = require( "node-cache" );
-global.db = require('./db.js')
-global.gg = require('./gg_tool.js')
-global.client = 0
-
-module.exports = function function_name(account) {
-	global.getClient = function (argument) {
-	if(client){
-		return client
-	}
-		var client = new TableStore.Client(account);
-		global.client = client
-		return client
-	}
-	return db;
+let db = require('./db.js')
+// let client = 0
+function tbs_ori(arg) {
+	this.account
+	this.client
 }
-return
-// global.S = function (key,value) {
-// 	if(value === undefine){
-// 		NodeCache.get(key)
-// 	}else{
-// 		NodeCache.set(key,value)
-// 	}
+
+tbs_ori.prototype.connect = function function_name(account) {
+	// this.account = account
+	// client =  new TableStore.Client(account);
+	db.setClient(new TableStore.Client(account))
+	return db.db
+}
+module.exports = function tbs(arg) {
+	let aa = new tbs_ori(arg)
+	// console.log(23,aa.creatTable)
+	return aa
+}
+
+
+
+
+
+// let default2 = require('./default.js')
+// function db_ori(table) {
+// 	this.client = client
+// 	this.table = table
+// 	// this.index
+// 	// this.whereValue
+// 	this.limitValue = default2.limit
+// 	this.pageValue = default2.page
+// 	this.countValue = default2.count
+
+// 	// this.fieldValue
+// 	// this.fieldValue
+
+// 	// this.searchQuery
+// 	// this.columnToGet
 // }
-var arg = process.argv.splice(2);
-console.log(13,arg)
-let test = require('./test/index.js')
-// require('./db.js')[arg[0]]()
-test[arg[0]]()
+// let fileList = require('./fileList.js')
+// for(let key in fileList){
+// 	let item = fileList[key]
+// 	db_ori.prototype[key] = require(item)
+// }
+
+// function db(arg) {
+// 	let aa = new db_ori(arg)
+// 	// console.log(23,aa.creatTable)
+// 	return aa
+// }

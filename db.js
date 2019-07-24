@@ -1,12 +1,16 @@
 
 let default2 = require('./default.js')
-function obj(table) {
+let client = 0
+function db_ori(table) {
+	this.client = client
 	this.table = table
 	// this.index
 	// this.whereValue
 	this.limitValue = default2.limit
 	this.pageValue = default2.page
 	this.countValue = default2.count
+
+	// this.fieldValue
 	// this.fieldValue
 
 	// this.searchQuery
@@ -15,11 +19,18 @@ function obj(table) {
 let fileList = require('./fileList.js')
 for(let key in fileList){
 	let item = fileList[key]
-	obj.prototype[key] = require(item)
+	db_ori.prototype[key] = require(item)
 }
 
-module.exports =  function a(arg) {
-	let aa = new obj(arg)
-	// console.log(23,aa.creatTable)
-	return aa
+// module.exports =  function 
+
+module.exports = {
+	setClient(e){
+		client = e
+	},
+	db(arg) {
+		let aa = new db_ori(arg)
+		// console.log(23,aa.creatTable)
+		return aa
+	}
 }

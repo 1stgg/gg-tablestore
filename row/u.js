@@ -2,7 +2,7 @@ let TableStore = require('tablestore')
 let get2attr = require('../table/to/get2attr.js')
 let tableDataType = require('../table/to/tableDataType.js')
 module.exports = async function a(arg) {
-	let client = getClient()
+	let client = this.client
 	
 	// console.log(3,key_arr)
 	let re = await client.search({

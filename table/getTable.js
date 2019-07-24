@@ -1,5 +1,5 @@
 module.exports = async function a(arg) {
-	let client = getClient()
+	let client = this.client
 	// console.log(3,client)
 	let re = await client.describeTable({
 		tableName: this.table

@@ -1,6 +1,6 @@
 let TableStore = require('tablestore')
 let tableDataType = require('../table/to/tableDataType.js')
-module.exports = async function a(arg) {
+module.exports = async function c(arg) {
 	let client = this.client
 	let col = []
 	for(let key in arg.data){

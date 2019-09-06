@@ -1,5 +1,5 @@
 let TableStore = require('tablestore')
-module.exports = async function a(arg) {
+module.exports = async function r(arg) {
 	let client = this.client
 	
 	// console.log(3,key_arr)

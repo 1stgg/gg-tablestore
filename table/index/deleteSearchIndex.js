@@ -1,5 +1,5 @@
 // let indexFieldType = require('../to/indexFiledType.js')
-module.exports = async function a(arg) {
+module.exports = async function deleteIndex(arg) {
 	let client = this.client
 	
 	// console.log(3,schema)
@@ -7,6 +7,6 @@ module.exports = async function a(arg) {
   	tableName:this.table,
   	indexName:arg.name || this.table,
 	})
-	console.log(10,'deleteSearchIndex',re)
+	// console.log(10,'deleteSearchIndex',re)
 	return re
 }

@@ -1,4 +1,4 @@
-module.exports = async function a(arg) {
+module.exports = async function createTable(arg) {
 	let client = this.client
 	// console.log(3,client)
 	let key_arr = []
@@ -9,7 +9,7 @@ module.exports = async function a(arg) {
 			type:item,
 		})
 	}
-	console.log(11,key_arr)
+	// console.log(11,key_arr)
 	let re = await client.createTable({
   	tableMeta: {
     	tableName: this.table,
@@ -31,6 +31,6 @@ module.exports = async function a(arg) {
 	    maxVersions: 1// 保存的最大版本数, 设置为1即代表每列上最多保存一个版本(保存最新的版本).
 	  }
 	})
-	console.log(24,re)
+	// console.log(24,re)
 	return re
 }

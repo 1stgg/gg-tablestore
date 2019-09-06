@@ -1,6 +1,6 @@
 let TableStore = require('tablestore')
 let queryType = require('../table/to/queryType.js')
-module.exports = function a(arg) {
+module.exports = function where(arg) {
 	this.whereValue = arg
 	let searchQuery = {
 		offset:(this.pageValue-1) * this.limitValue,

@@ -1,21 +1,23 @@
 let TableStore = require('tablestore')
 let db = require('./db.js')
 // let client = 0
-function tbs_ori(arg) {
-	this.account
-	this.client
-}
+// function tbs_ori(arg) {
+// 	this.account
+// 	this.client
+// }
 
-tbs_ori.prototype.connect = function function_name(account) {
-	// this.account = account
-	// client =  new TableStore.Client(account);
+// tbs_ori.prototype.connect = function function_name(account) {
+// 	// this.account = account
+// 	// client =  new TableStore.Client(account);
+// 	db.setClient(new TableStore.Client(account))
+// 	return db.db
+// }
+module.exports = function tbs(account) {
+	// let aa = new tbs_ori(arg)
+	// // console.log(23,aa.creatTable)
+	// return aa
 	db.setClient(new TableStore.Client(account))
 	return db.db
-}
-module.exports = function tbs(arg) {
-	let aa = new tbs_ori(arg)
-	// console.log(23,aa.creatTable)
-	return aa
 }
 
 

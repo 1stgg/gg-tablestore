@@ -1,7 +1,7 @@
 let TableStore = require('tablestore')
 let get2attr = require('../table/to/get2attr.js')
 let tableDataType = require('../table/to/tableDataType.js')
-module.exports = async function a(arg) {
+module.exports = async function u(arg) {
 	let client = this.client
 	
 	// console.log(3,key_arr)

@@ -1,5 +1,5 @@
 let indexFieldType = require('../to/indexFiledType.js')
-module.exports = async function a(arg) {
+module.exports = async function createIndex(arg) {
 	let client = this.client
 	let schema = {
 		fieldSchemas:[]
@@ -12,7 +12,7 @@ module.exports = async function a(arg) {
 			fieldType:indexFieldType(item.type)
 		})
 	}
-	console.log(3,schema) 
+	// console.log(3,schema) 
 	// let tableName=this.table
  //  let	indexName=arg.name || this.table
 	// let list = await client.listSearchIndex({
@@ -34,6 +34,6 @@ module.exports = async function a(arg) {
   	indexName:indexName,
   	schema:schema
 	})
-	console.log(21,'createSearchIndex',re)
+	// console.log(21,'createSearchIndex',re)
 	return re
 }

@@ -44,4 +44,36 @@ db('db_name').get({
 json2str//键值对和复杂query(_str)和简化obj 转 str query
 str2obj// str query 转 简化obj
 obj2origin// 简化obj转原生obj
+
+or and not
+
+// bool:{
+// 	and:[
+// 		{a:['>=',6]},
+// 		{bool:{
+// 			and:[
+// 				{b:['<=',6]},
+// 			]
+// 		}},
+// 	],
+// 	or:[],
+// }
+
+{
+	order_status:{
+		and:[
+			['>=',6],
+			{
+				type:2,
+			},
+		],
+		or:[
+			['=',3],
+			{
+				type:1,
+			},
+		]
+	}
+}
+
 ```

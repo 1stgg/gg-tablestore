@@ -1,5 +1,6 @@
 let TableStore = require('tablestore')
 let queryType = require('../table/to/queryType.js')
+let wherejs = require('./where/base')
 module.exports = function where(arg) {
 	this.whereValue = arg
 	let searchQuery = {
@@ -16,7 +17,6 @@ module.exports = function where(arg) {
 	}
 	
 	let query = nest(this.whereValue)
-	
 
 	searchQuery.query = query
 	console.log(22,query)
@@ -26,32 +26,40 @@ module.exports = function where(arg) {
 }
 
 function nest(arg) {
+	
 	let re = {}
 	// if(typeof(arg) !='object'){
 	// 	return
 	// }
-	let key = Object.keys(arg)
 	console.log(33.1,arg)
-	console.log(33,key)
-	switch(key[0]){
-	    case 'and' :
-	    case 'or' :
-	    case 'not' :
-	    	re = {
-	    		queryType:queryType(key[0]),
-	    		query:nestSecond(arg[key[0]]),
-	    	}
-	        break
-	    default :
-	    	re = {
-	    		queryType:queryType(key[0]),
-	    		query:arg[key[0]],
-	    	}
+	let formate = []
+	let query = []
+	
+	for(let key in arg){
+	  let item = arg[key]
+	  switch(key){
+			case 'and' :
+			case 'or' :
+			case 'not' :
+				// re = {
+				// 	queryType:queryType('BOOL'),
+				// 	query:nestSecond(arg[key[0]]),
+				// }
+					break
+			default :
+				query.push(wherejs.getQuery(key,item))
 
-	      break
+				break
+		}
 	}
+	
 	// console.log(50,re)
-	return re
+	return {//6
+			queryType: TableStore.QueryType.BOOL_QUERY,
+			query: {
+					mustQueries: query
+			}
+	}
 }
 
 function nestSecond(arg) {

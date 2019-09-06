@@ -16,7 +16,27 @@ function db_ori(table) {
 	// this.searchQuery
 	// this.columnToGet
 }
-let fileList = require('./fileList.js')
+let fileList = {
+	//table
+	createTable:'./table/createTable.js',
+	deleteTable:'./table/deleteTable.js',
+	listTable:'./table/listTable.js',
+	getTable:'./table/getTable.js',
+
+	//index
+	createIndex:'./table/index/createSearchIndex.js',
+	deleteIndex:'./table/index/deleteSearchIndex.js',
+	listIndex:'./table/index/listSearchIndex.js',
+
+	//curd
+	c:'./row/c.js',
+	u:'./row/u.js',
+	r:'./row/r.js',
+	d:'./row/d.js',
+	where:'./row/where.js',
+
+
+}
 for(let key in fileList){
 	let item = fileList[key]
 	db_ori.prototype[key] = require(item)

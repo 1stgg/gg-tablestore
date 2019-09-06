@@ -20,11 +20,41 @@ module.exports = function where(arg) {
 
 	searchQuery.query = query
 	console.log(22,query)
+	console.log(23,JSON.stringify(query))
 	this.searchQuery = searchQuery
 	return this
 }
 
 function nest(arg) {
+	let re = {}
+	// if(typeof(arg) !='object'){
+	// 	return
+	// }
+	let key = Object.keys(arg)
+	console.log(33.1,arg)
+	console.log(33,key)
+	switch(key[0]){
+	    case 'and' :
+	    case 'or' :
+	    case 'not' :
+	    	re = {
+	    		queryType:queryType(key[0]),
+	    		query:nestSecond(arg[key[0]]),
+	    	}
+	        break
+	    default :
+	    	re = {
+	    		queryType:queryType(key[0]),
+	    		query:arg[key[0]],
+	    	}
+
+	      break
+	}
+	// console.log(50,re)
+	return re
+}
+
+function nestSecond(arg) {
 	let re = {}
 	// if(typeof(arg) !='object'){
 	// 	return
@@ -58,3 +88,38 @@ function nest(arg) {
 	// console.log(50,re)
 	return re
 }
+
+// function nest(arg) {
+// 	let re = {}
+// 	// if(typeof(arg) !='object'){
+// 	// 	return
+// 	// }
+// 	let key = Object.keys(arg)
+// 	// console.log(33,key)
+// 	switch(key[0]){
+// 	    case 'and' :
+// 	    	// console.log(31,'and')
+// 	    	re.mustQueries = []
+// 	    	for(let key2 in arg[key[0]]){
+// 	    		let item2 = arg[key[0]][key2]
+// 	    		// console.log(39,item2)
+// 	    		re.mustQueries.push(nest(item2))
+// 	    	}
+// 	        break
+// 	    case 'bool' :
+// 	    	re = {
+// 	    		queryType:queryType(key[0]),
+// 	    		query:nest(arg[key[0]]),
+// 	    	}
+// 	        break
+// 	    default :
+// 	    	re = {
+// 	    		queryType:queryType(key[0]),
+// 	    		query:arg[key[0]],
+// 	    	}
+
+// 	      break
+// 	}
+// 	// console.log(50,re)
+// 	return re
+// }

@@ -6,7 +6,7 @@ let re =
 	.createTable({//主键
 		id:'INTEGER',//int类型
 		str:'STRING',//str类型
-		bin:'BINARY',//bin类型
+		// bin:'BINARY',//bin类型
 	})
 ```
 #getTable

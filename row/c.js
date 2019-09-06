@@ -1,10 +1,10 @@
 let TableStore = require('tablestore')
 let tableDataType = require('../table/to/tableDataType.js')
-module.exports = async function c(arg) {
+module.exports = async function c(keys,data) {
 	let client = this.client
 	let col = []
-	for(let key in arg.data){
-		let item = arg.data[key]
+	for(let key in data){
+		let item = data[key]
 		
 		col.push({
 			[key]:tableDataType(item)
@@ -12,8 +12,8 @@ module.exports = async function c(arg) {
 	}
 	// console.log(col)
 	let key_arr = []
-	for(let key in arg.key){
-		let item = arg.key[key]
+	for(let key in keys){
+		let item = keys[key]
 		switch(typeof(item)){
 		    case 'number' :
 		    	item = TableStore.Long.fromNumber(item)

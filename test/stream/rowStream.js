@@ -24,19 +24,18 @@ module.exports = async function rowStream(db,table_name) {
 			float:['>',data.float -1],
 			and:[//多条件
 				{
-					str:'str',
 					str_data:'TEXT',
 					int:['>=',data.int - 10],
-					// not:[
-					// 	{bool:true}
-					// ]
+					not:[
+						{bool:true}
+					]
 				},
 				{
-					int:['<=',data.int - 10],
-					// or:[
-					// 	{bool:true,str:'233'},
-					// 	{bool:false},
-					// ]
+					int:['<=',data.int +10],
+					or:[
+						{bool:true,str_data:'TEXT'},
+						{bool:false},
+					]
 				}
 			]
 		})

@@ -128,38 +128,21 @@ let where = {
     obj2arr(obj){
         let arr = []
         let bool = {}
+        console.log(131,obj);
         
         if (obj.constructor == Array) {
             for(let key_arr in obj){
               let item_arr = obj[key_arr]
               for(let key in item_arr){
-                let item = item[key]
-                switch (key) {
-                    case 'and':
-                            bool.and = this.obj2arr(item)
-                        break;
-                    case 'or':
-                            bool.or = this.obj2arr(item)
-                        break;
-                    case 'not':
-                            bool.not = this.obj2arr(item)
-                        break;
-                
-                    default:
-                            arr.push({key:key,item:item})
-                        break;
-                }
-              }
-            }
-        }else{
-            for(let key in obj){
-                let item = item[key]
+                let item = item_arr[key]
                 switch (key) {
                     case 'and':
                             bool.mustQueries = this.obj2arr(item)
                         break;
                     case 'or':
                             bool.shouldQueries = this.obj2arr(item)
+
+                            bool.minimumShouldMatch = 1
                         break;
                     case 'not':
                             bool.mustNotQueries = this.obj2arr(item)
@@ -170,14 +153,40 @@ let where = {
                         break;
                 }
               }
+            }
+        }else{
+            for(let key2 in obj){
+                let item2 = obj[key2]
+                switch (key2) {
+                    case 'and':
+                            bool.mustQueries = this.obj2arr(item2)
+                        break;
+                    case 'or':
+                            bool.shouldQueries = this.obj2arr(item2)
+                        break;
+                    case 'not':
+                            bool.mustNotQueries = this.obj2arr(item2)
+                            bool.minimumShouldMatch = 1
+                        break;
+                
+                    default:
+                            arr.push(where.getQuery(key2,item2))
+                        break;
+                }
+              }
         }
-        if (bool.and || bool.or|| bool.not) {
+        if (bool.mustQueries || bool.shouldQueries|| bool.mustNotQueries) {
             
             arr.push({
                 queryType: TableStore.QueryType.BOOL_QUERY,
                 query:bool
             })
+            console.log(181,JSON.stringify(bool));
+            
         }
+        console.log('bool type',TableStore.QueryType.BOOL_QUERY);
+        
+        return arr
     },
     obj2simple(obj){
         let query_arr = []

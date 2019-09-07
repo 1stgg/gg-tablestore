@@ -16,7 +16,14 @@ module.exports = function where(arg) {
     getTotalCount: this.countValue // 结果中的TotalCount可以表示表中数据的总行数， 默认false不返回
 	}
 	
-	let query = nest(this.whereValue)
+	// let query = nest(this.whereValue)
+	// let query = wherejs.obj2arr(this.whereValue)
+	let query = {//6
+		queryType: TableStore.QueryType.BOOL_QUERY,
+		query: {
+			mustQueries:wherejs.obj2arr(this.whereValue)
+		}
+}
 
 	searchQuery.query = query
 	console.log(22,query)

@@ -47,6 +47,6 @@ global.db = gdb({
 ```
 ### 3。使用
 - [表的curd](./md/table.md)
-- [索引的curd](./md/inde.md)
-- [数据行的curd](./md/row.md)
+- [索引的curd](./md/index.md)
+- [数据行的curd](./md/curd.md)
 

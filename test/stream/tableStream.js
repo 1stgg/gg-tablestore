@@ -33,10 +33,10 @@ module.exports = async function tableStream(db,table_name) {
 	await db(table_name)
 	.createIndex({
 		id:'long',
-		str:'TEXT',
+		str:'KEYWORD',
 		int:'long',
 		float:'DOUBLE',
-		str_data:'TEXT',
+		str_data:'KEYWORD',
 		bool:'BOOLEAN',
 	})
 

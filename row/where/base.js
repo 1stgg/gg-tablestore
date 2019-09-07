@@ -62,6 +62,19 @@ let where = {
             }
         }
     },
+	like(key,val){
+        console.log(66,val);
+        if ('*'==val[0]) {
+            val = '?'+val
+        }
+        return { // 设置查询类型为TermsQuery
+            queryType: TableStore.QueryType.WILDCARD_QUERY,
+            query: {
+                fieldName: key,
+                value: val
+            }
+        }
+    },
     getQuery(key,val){
         let re = {}
         
@@ -82,6 +95,9 @@ let where = {
                    break;
                case 'in':
                    re = where.in(key,val[1])
+                   break;
+               case 'like':
+                   re = where.like(key,val[1])
                    break;
            
                default:

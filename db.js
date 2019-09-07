@@ -10,6 +10,8 @@ function db_ori(table) {
 	this.pageValue = default2.page
 	this.countValue = default2.count
 
+	this.default = default2
+
 	// this.fieldValue
 	// this.fieldValue
 
@@ -34,6 +36,9 @@ let fileList = {
 	r:'./row/r.js',
 	d:'./row/d.js',
 	where:'./row/where.js',
+
+	//more
+	setDefault:'./more/setDefault.js',
 
 
 }

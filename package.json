@@ -1,7 +1,7 @@
 {
   "name": "gg-tablestore",
-  "version": "1.0.4",
-  "description": "简化tablestore（node）语法，采用键值对控制query # 大纲 ## 1.query ### 1.1  ```js db('db_name').get({ \tkey:// \t{ \t\tid:233, \t}, \tindex:'db_name',//索引，默认为表名 \tquery:{ \t\tbool:{ \t\t\tand:[ \t\t\t\t{ \t\t\t\t\trange:{ \t\t\t\t\t\tfield:'field', \t\t\t\t\t\tfrom:2, \t\t\t\t\t\tlower:true, \t\t\t\t\t\tlt:6, \t\t\t\t\t} \t\t\t\t}, \t\t\t], \t\t} \t} }) ``` ### 查询关键词 |key|title|origin| |-|-|-| |eq|等于|TERM_QUERY| |like|近似匹配|MATCH_QUERY|",
+  "version": "1.0.5",
+  "description": "链式操作查询tablestore,详情见 [GitHub](https://github.com/1stgg/gg-tablestore)",
   "main": "index.js",
   "directories": {
     "test": "test"

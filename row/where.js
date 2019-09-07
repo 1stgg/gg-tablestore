@@ -26,74 +26,63 @@ module.exports = function where(arg) {
 }
 
 function nest(arg) {
-	
-	let re = {}
-	// if(typeof(arg) !='object'){
-	// 	return
-	// }
+
 	console.log(33.1,arg)
-	let formate = []
 	let query = []
+	let query_obj = {
+		mustQueries:[],
+	}
+	
 	
 	for(let key in arg){
 	  let item = arg[key]
 	  switch(key){
 			case 'and' :
+				console.log(41,item);
+				
+					query_obj.mustQueries = nest(item)
+					break
 			case 'or' :
+					query_obj.shouldQueries = nest(item)
+					break
 			case 'not' :
-				// re = {
-				// 	queryType:queryType('BOOL'),
-				// 	query:nestSecond(arg[key[0]]),
-				// }
+					query_obj.mustNotQueries = nest(item)
 					break
 			default :
-				query.push(wherejs.getQuery(key,item))
+				query_obj.mustQueries.push(wherejs.getQuery(key,item))
 
 				break
 		}
 	}
 	
-	// console.log(50,re)
+	console.log(50,query_obj)
+	console.log(50.1,query_obj.mustQueries)
+	console.log(50.2,query_obj.shouldQueries)
+	console.log(50.3,query_obj.mustNotQueries)
 	return {//6
 			queryType: TableStore.QueryType.BOOL_QUERY,
-			query: {
-					mustQueries: query
-			}
+			query: query_obj
 	}
 }
 
-function nestSecond(arg) {
-	let re = {}
-	// if(typeof(arg) !='object'){
-	// 	return
-	// }
-	let key = Object.keys(arg)
-	// console.log(33,key)
-	switch(key[0]){
-	    case 'and' :
-	    	// console.log(31,'and')
-	    	re.mustQueries = []
-	    	for(let key2 in arg[key[0]]){
-	    		let item2 = arg[key[0]][key2]
-	    		// console.log(39,item2)
-	    		re.mustQueries.push(nest(item2))
-	    	}
-	        break
-	    case 'bool' :
-	    	re = {
-	    		queryType:queryType(key[0]),
-	    		query:nest(arg[key[0]]),
-	    	}
-	        break
-	    default :
-	    	re = {
-	    		queryType:queryType(key[0]),
-	    		query:arg[key[0]],
-	    	}
-
-	      break
+function nestSecond(arr) {
+	let re = []
+	
+	for(let key in arr){
+		let item = arr[key]
+		for(let key2 in item){
+			let item2 = item[key2]
+			switch (key2) {
+				case 'and':
+					
+					break;
+			
+				default:
+						re.push(wherejs.getQuery(key,item))
+					break;
+			}
+		}
 	}
-	// console.log(50,re)
 	return re
 }
 

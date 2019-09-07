@@ -2,12 +2,12 @@ let gg = require('../../gg_tool')
 
 module.exports = async function rowStream(db,table_name) {
 	let keys = {
-		id:Math.random()*666,
+		id:parseInt(Math.random()*666) ,
 		str:'str',
 	}
 	
 	let data = {
-		int:Math.random()*666,
+		int:parseInt(Math.random()*666),
 		float:Math.random()*666,
 		str_data:'TEXT',
 		bool:false,
@@ -27,16 +27,16 @@ module.exports = async function rowStream(db,table_name) {
 					str:'str',
 					str_data:'TEXT',
 					int:['>=',data.int - 10],
-					not:[
-						{bool:true}
-					]
+					// not:[
+					// 	{bool:true}
+					// ]
 				},
 				{
 					int:['<=',data.int - 10],
-					or:[
-						{bool:true,str:'233'},
-						{bool:false},
-					]
+					// or:[
+					// 	{bool:true,str:'233'},
+					// 	{bool:false},
+					// ]
 				}
 			]
 		})

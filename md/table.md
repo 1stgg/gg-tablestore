@@ -1,5 +1,5 @@
 
-#createTable
+# createTable
 ```js
 let re = 
 	await db('test2')
@@ -9,19 +9,19 @@ let re =
 		// bin:'BINARY',//bin类型
 	})
 ```
-#getTable
+# getTable
 ```js
 let re = 
 	await db('test2')
 	.getTable()
 ```
-#listTable
+# listTable
 ```js
 let re = 
 	await db()
 	.listTable()
 ```
-#deleteTable
+# deleteTable
 ```js
 let re = 
 	await db('test2')

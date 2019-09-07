@@ -1,5 +1,5 @@
 
-#creatIndex
+# creatIndex
 ```js
 let re = 
 	await db('test')
@@ -11,9 +11,15 @@ let re =
 		bool:'BOOLEAN',
 	})
 ```
-#listIndex
+# listIndex
 ```js
 let re = 
 	await db('test')
 	.listIndex()
+```
+# deleteIndex
+```js
+let re = 
+	await db('test')
+	.deleteIndex()
 ```

@@ -1,4 +1,4 @@
-# 高效tablestore工具链
+# 链式操作查询tablestore
 
 ## 示例
 ```js
@@ -29,6 +29,8 @@ db('table_name')
 ## 注意事项
 - 目前在初始开发中，不保证向上兼容
 - npm安装的可能是旧版，可能与文档不符
+- git下载，不保证是stable版
+- 高效是指开发高效，并非运行高效
 
 ## 使用方式
 ### 1.安装
@@ -45,8 +47,14 @@ global.db = gdb({
 	instancename: 'instancename',
 })
 ```
-### 3。使用
+### 3.使用
 - [表的curd](./md/table.md)
 - [索引的curd](./md/index.md)
 - [数据行的curd](./md/curd.md)
+### 4.where支持类型
 
+|name|title|示例|
+|-|-|-|
+|>,>=,<,<=|比较|int:['>',233]|
+|in|包含|int:['in',[233,666]]|
+|like|通配符模糊搜索|str:['like','\*val\*']]|

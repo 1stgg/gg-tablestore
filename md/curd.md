@@ -48,3 +48,26 @@ let table_val =
 		})
 		.r()
 ```
+# u 更新
+```js
+let update = 
+		await db(table_name)
+		.where({
+			id:337,
+			float:['>',270],
+			
+		})
+		.u({
+			str_data:'tExt'+Math.random()*233
+		})
+	console.log(75,update);
+```
+# d 删除
+```js
+let del_status = await db(table_name)
+		.where({
+			id:437
+		})
+		.d()
+	console.log(82,del_status);
+```

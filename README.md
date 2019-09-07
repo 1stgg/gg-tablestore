@@ -1,79 +1,52 @@
-# 目标
-简化tablestore（node）语法，采用键值对控制query
-# 大纲
-## 1.query
-### 1.1 
+# 高效tablestore工具链
+
+## 示例
 ```js
-db('db_name').get({
-	key://
-	{
-		id:233,
-	},
-	index:'db_name',//索引，默认为表名
-	query:{
-		bool:{
-			and:[
-				{
-					range:{
-						field:'field',
-						from:2,
-						lower:true,
-						lt:6,
-					}
-				},
-			],
+db('table_name')
+.where({
+	int : ['>=',666],
+	str : 'str',
+	and:[//多条件
+		{
+			bool:false,
+			not:[
+				{bool:true,int:['in',[600,500]],}
+			]
+		},
+		{
+			int:['<=',600],
+			str_data:['like','*E*'],
+			or:[
+				{bool:true,str_data:'TEXT'},
+				{bool:false},
+			]
 		}
-	}
+	]
+})
+.r()
+```
+
+## 注意事项
+- 目前在初始开发中，不保证向上兼容
+- npm安装的可能是旧版，可能与文档不符
+
+## 使用方式
+### 1.安装
+```sh
+npm i gg-tablestore --s
+```
+### 2.配置
+```js
+let gdb = require('gg-tablestore')
+global.db = gdb({
+	accessKeyId: 'accessKeyId',
+	secretAccessKey: 'secretAccessKey',
+	endpoint: 'endpoint',
+	instancename: 'instancename',
 })
 ```
-### 查询关键词
-|key|title|origin|
-|-|-|-|
-|eq|等于|TERM_QUERY|
-|like|近似匹配|MATCH_QUERY|
+### 3。使用
+- [表的curd](./md/table.md)
+- [索引的curd](./md/inde.md)
+- [数据行的curd](./md/row.md)
 
-### 函数
-|key|title|
-|-|-|
-|db|获取表|
-|db.get|获取表|
-
-
-#za
-```js
-json2str//键值对和复杂query(_str)和简化obj 转 str query
-str2obj// str query 转 简化obj
-obj2origin// 简化obj转原生obj
-
-or and not
-
-// bool:{
-// 	and:[
-// 		{a:['>=',6]},
-// 		{bool:{
-// 			and:[
-// 				{b:['<=',6]},
-// 			]
-// 		}},
-// 	],
-// 	or:[],
-// }
-
-{
-	order_status:{
-		and:[
-			['>=',6],
-			{
-				type:2,
-			},
-		],
-		or:[
-			['=',3],
-			{
-				type:1,
-			},
-		]
-	}
-}
-
-```

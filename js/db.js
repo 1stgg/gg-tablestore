@@ -19,32 +19,10 @@ function db_ori(table) {
 	// this.columnToGet
 }
 let fileList = {
-	// //table
-	// createTable:'./table/createTable.js',
-	// deleteTable:'./table/deleteTable.js',
-	// listTable:'./table/listTable.js',
-	// getTable:'./table/getTable.js',
-
-	// //index
-	// createIndex:'./table/index/createSearchIndex.js',
-	// deleteIndex:'./table/index/deleteSearchIndex.js',
-	// listIndex:'./table/index/listSearchIndex.js',
-
-	// //curd
-	// c:'./row/c.js',
-	// u:'./row/u.js',
-	// r:'./row/r.js',
-	// d:'./row/d.js',
-	// where:'./row/where.js',
-
-	// //more
-	// setDefault:'./more/setDefault.js',
-
-	table:'./js/table.js',
-	searchIndex:'./js/searchIndex.js',
-	rows:'./js/rows.js',
-
-
+	
+	table:'./table.js',
+	searchIndex:'./searchIndex.js',
+	rows:'./rows.js',
 }
 for(let key_list in fileList){
 	let file = fileList[key_list]

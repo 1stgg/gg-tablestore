@@ -66,7 +66,7 @@ let where = {
         if ('*'==val[0]) {
             val = '?'+val
         }
-        return { // 设置查询类型为TermsQuery
+        return { // 设置查询类型为WILDCARD_QUERY
             queryType: TableStore.QueryType.WILDCARD_QUERY,
             query: {
                 fieldName: key,

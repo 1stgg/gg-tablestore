@@ -1,4 +1,4 @@
-let gg = require('../../gg_tool')
+let gg = require('../../js/gg_tool')
 
 module.exports = async function rowStream(db,table_name) {
 	let keys = {

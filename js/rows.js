@@ -48,19 +48,9 @@ module.exports = {
         // console.log(169,'add',re.row.primaryKey[0].value.toNumber())
         return this.getData('c',re)
     },
-    async d(arg) {
-        let client = this.client
+    async d() {
         
-        // console.log(3,key_arr)
-        let re = await client.search({
-          tableName: this.table,
-          indexName: this.index||this.table,
-          searchQuery: this.searchQuery,
-          columnToGet: { //返回列设置：RETURN_SPECIFIED(自定义),RETURN_ALL(所有列),RETURN_NONE(不返回)
-            returnType: TableStore.ColumnReturnType.RETURN_ALL
-          }
-        })
-        let dustbin_type = this.default.delete.dustbin_type
+        
         let true_del = false
         switch (this.default.delete.type) {
             case 0:
@@ -74,11 +64,33 @@ module.exports = {
                 break;
         }
         
-        if (dustbin_type== 20 || (dustbin_type == 10&& true_del)) {
-            this.addDustbin(this.table,re)
-        }
         
-        let re2 = []
+        let re2 = {}
+        
+        if (true_del) {
+            re2 = await this.true_del()
+        }else{
+            re2 = await this.u({[this.default.delete.filed]:true})
+        }
+        // console.log(47,key_arr)
+        // let re2 = 
+        console.log(56,'delete',re2)
+        return re2
+    },
+    async true_del() {
+        let client = this.client
+        
+        // console.log(3,key_arr)
+        let re = await client.search({
+          tableName: this.table,
+          indexName: this.index||this.table,
+          searchQuery: this.searchQuery,
+          columnToGet: { //返回列设置：RETURN_SPECIFIED(自定义),RETURN_ALL(所有列),RETURN_NONE(不返回)
+            returnType: TableStore.ColumnReturnType.RETURN_ALL
+        }
+        })
+        
+        let rows = []
         for(let key in re.rows){
             let item = re.rows[key]
             let keys = []
@@ -88,25 +100,28 @@ module.exports = {
                     [item2.name]:item2.value
                 })
             }
-            if (true_del) {
-                re2.push(await client.deleteRow({
-                    tableName: this.table,
-                    condition: new TableStore.Condition(TableStore.RowExistenceExpectation.EXPECT_EXIST, null),
-                    primaryKey: keys
-                }))
-            }else{
-                re2.push(await client.deleteRow({
-                    tableName: this.table,
-                    condition: new TableStore.Condition(TableStore.RowExistenceExpectation.EXPECT_EXIST, null),
-                    primaryKey: keys
-                }))
-            }
-            
+            // let attr = get2attr(item.attributes)
+            // let colu = attr.concat(col)
+            // console.log(60,colu)
+            rows.push({
+                type: 'DELETE',
+                condition: new TableStore.Condition(TableStore.RowExistenceExpectation.EXPECT_EXIST, null),
+                primaryKey: keys,
+                // attributeColumns: colu,
+                returnContent: { returnType: TableStore.ReturnType.Primarykey }
+            })
         }
-        // console.log(47,key_arr)
-        // let re2 = 
-        console.log(56,'delete',re2)
-        return re
+        let re2 = await client.batchWriteRow({
+          tables: [{
+                tableName: this.table,
+                rows: rows,
+            }],
+        })
+        let dustbin_type = this.default.delete.dustbin_type
+        if (dustbin_type== 20 || (dustbin_type == 10)) {
+            this.addDustbin(this.table,re)
+        }
+        return this.getData('u',re2)
     },
     async r(arg) {
         let client = this.client
@@ -159,26 +174,22 @@ module.exports = {
             let colu = attr.concat(col)
             // console.log(60,colu)
             rows.push({
-            type: 'PUT',
-            condition: new TableStore.Condition(TableStore.RowExistenceExpectation.EXPECT_EXIST, null),
-            primaryKey: keys,
-            attributeColumns: colu,
-            returnContent: { returnType: TableStore.ReturnType.Primarykey }
-        })
+                type: 'PUT',
+                condition: new TableStore.Condition(TableStore.RowExistenceExpectation.EXPECT_EXIST, null),
+                primaryKey: keys,
+                attributeColumns: colu,
+                returnContent: { returnType: TableStore.ReturnType.Primarykey }
+            })
         }
-        // console.log(47,key_arr)
-        // console.log(48,col)
-        // console.log(169,'update',re)
         let re2 = await client.batchWriteRow({
           tables: [{
                 tableName: this.table,
                 rows: rows,
             }],
         })
-        // console.log(152,TableStore.ReturnType);
-        // console.log(56,'update',re2.tables[0].capacityUnit)
         return this.getData('u',re2)
     },
+    
     where(arg) {
         this.whereValue = arg
         let page = this.config_obj.page||this.default.page

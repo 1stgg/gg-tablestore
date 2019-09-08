@@ -42,17 +42,19 @@ module.exports = async function defaultStream(db,table_name) {
     })
     console.log(41,c_id);
     let u_ids = await db(table_name).where({
-        id:15679244237447930
+        id:15679326731253020
     }).u({
         str:'str'
     })
     let r_data = await db(table_name).config({
         count:true
     }).where({
-        id:15679244237447930
+        id:15679326731253020
     }).r()
-    let d_data = await db(table_name).where({
-        id:15679250927673096
+    let d_data = await db(table_name).config({
+        del:true
+    }).where({
+        id:15679517436666180
     }).d()
     console.log(50,d_data);
 

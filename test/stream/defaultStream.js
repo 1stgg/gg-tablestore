@@ -13,15 +13,14 @@ module.exports = async function defaultStream(db,table_name) {
             type:'time_random',//custom:自定义,time_random:索引只有id,值为  时间戳+随机数
         }
     })
-    
-	let list_index = await db(table_name).listIndex()
-	console.log(6,list_index);
-	return
-	let is_have_index = gg.inArr(table_name,list_index)
-	if (is_have_index) {
-		await db(table_name).deleteIndex()
-		// console.log(`${table_name} index is have,dele it success`);
-	}
+	// let list_index = await db(table_name).listIndex()
+	// console.log(6,list_index);
+	// // return
+	// let is_have_index = gg.inArr(table_name,list_index)
+	// if (is_have_index) {
+	// 	await db(table_name).deleteIndex()
+	// 	// console.log(`${table_name} index is have,dele it success`);
+	// }
 	
 	let list = await db().listTable()
 	// console.log('tableStream',4,list)
@@ -32,7 +31,6 @@ module.exports = async function defaultStream(db,table_name) {
 	}
 	let success = 
 		await db(table_name)
-		.createTable({//主键
-			id:'INTEGER',//int类型
-		})
+        .createTable()
+    
 }

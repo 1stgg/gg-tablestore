@@ -14,7 +14,7 @@ module.exports = {
         let re = await client.createTable({
           tableMeta: {
             tableName: this.table,
-            primaryKey: key_arr || [
+            primaryKey: key_arr.length ? key_arr : [
               {
                 name: 'id',
                 type: 'INTEGER'
@@ -58,7 +58,8 @@ module.exports = {
         // console.log(3,client)
         let re = await client.listTable()
         // console.log(5,re)
-    
-        return re.table_names
+      
+        // return re.table_names
+        return this.getData('listTable',re)
     }
 }

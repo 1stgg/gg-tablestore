@@ -11,6 +11,7 @@ function db_ori(table) {
 	this.countValue = default2.count
 
 	this.default = default2
+	this.config_obj = {}
 
 	// this.fieldValue
 	// this.fieldValue
@@ -23,13 +24,14 @@ let fileList = {
 	table:'./table.js',
 	searchIndex:'./searchIndex.js',
 	rows:'./rows.js',
+	more:'./more.js',
 }
 for(let key_list in fileList){
 	let file = fileList[key_list]
 	let file_data = require(file)
 	for(let key in file_data){
 		let item = file_data[key]
-		console.log(53,file_data);
+		// console.log(53,file_data);
 		
 		db_ori.prototype[key] = item
 	}

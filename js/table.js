@@ -14,7 +14,7 @@ module.exports = {
         let re = await client.createTable({
           tableMeta: {
             tableName: this.table,
-            primaryKey: key_arr.length ? key_arr : [
+            primaryKey: key_arr.length && this.default.index.type == 'custom' ? key_arr : [
               {
                 name: 'id',
                 type: 'INTEGER'

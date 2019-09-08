@@ -1,9 +1,15 @@
 let indexFieldType = require('./to/indexFiledType.js')
 module.exports = {
-    async createIndex(arg,index_name) {
+    async createIndex(arg = {},index_name) {
         let client = this.client
         let schema = {
             fieldSchemas:[]
+        }
+        if (this.default.index.type == 'time_random' || this.config_obj.index_type == 'time_random') {
+            arg.id = 'long'
+        }
+        if (this.default.delete.type != 0) {
+            arg[this.default.delete.filed] = 'boolean'
         }
         for(let key in arg){
             let item = arg[key]

@@ -59,3 +59,8 @@ global.db = gdb({
 |>,>=,<,<=|比较|int:['>',233]|
 |in|包含|int:['in',[233,666]]|
 |like|通配符模糊搜索|str:['like','\*val\*']]|
+### 5.config字段
+
+|name|title|示例|
+|-|-|-|
+|del|是否真删除|true:真删除|

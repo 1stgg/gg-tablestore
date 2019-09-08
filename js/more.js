@@ -19,6 +19,7 @@ module.exports = {
     },
     config(config){
         this.config_obj = config
+        return this
     },
     getLastSql(e){
         
@@ -27,6 +28,9 @@ module.exports = {
         let get_data = require('./get_data.js')
         let data_type = (this.default.data.type == 'simple' || this.config_obj.data =='simple') ? 'simple':'origin'
         return get_data[fun_name](data_type,origin)
+    },
+    getId(){
+        return parseInt((new Date()).getTime()+''+parseInt(Math.random()*9999))
     },
     test(e){
         console.log(20,this.config_obj);

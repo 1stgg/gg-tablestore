@@ -22,5 +22,19 @@ module.exports = {
 			}
 		}
 		return false;
-	}
+	},
+	shallowCopy(e){
+        // console.log(91,e)
+        // console.log(93,typeof(e))
+        if(typeof(e) != "object"){
+            return e
+        }
+        let re = {}
+        for(let key in e){
+            let item = this.shallowCopy(e[key])
+            // console.log(94,key,item)
+            re[key] = item
+        }
+        return re
+    },
 }

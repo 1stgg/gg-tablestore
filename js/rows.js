@@ -2,10 +2,17 @@ let TableStore = require('tablestore')
 let tableDataType = require('./to/tableDataType.js')
 let get2attr = require('./to/get2attr.js')
 let wherejs = require('./where.js')
+let gg = require('./gg_tool.js')
 module.exports = {
     async c(keys,data) {
         let client = this.client
         let col = []
+        if (this.default.index.type == 'time_random') {
+            data = gg.shallowCopy(keys)
+            keys = {
+                id: this.getId()
+            }
+        }
         for(let key in data){
             let item = data[key]
             
@@ -38,8 +45,8 @@ module.exports = {
           attributeColumns: col,
           returnContent: { returnType: TableStore.ReturnType.Primarykey }
         })
-        console.log(169,'add',re)
-        return re
+        // console.log(169,'add',re.row.primaryKey[0].value.toNumber())
+        return this.getData('c',re)
     },
     async d(arg) {
         let client = this.client
@@ -51,9 +58,26 @@ module.exports = {
           searchQuery: this.searchQuery,
           columnToGet: { //返回列设置：RETURN_SPECIFIED(自定义),RETURN_ALL(所有列),RETURN_NONE(不返回)
             returnType: TableStore.ColumnReturnType.RETURN_ALL
-        }
+          }
         })
-        let rows = []
+        let dustbin_type = this.default.delete.dustbin_type
+        let true_del = false
+        switch (this.default.delete.type) {
+            case 0:
+                true_del = true
+                break;
+            case 10:
+                true_del = this.config_obj.del
+                break;
+        
+            default:
+                break;
+        }
+        
+        if (dustbin_type== 20 || (dustbin_type == 10&& true_del)) {
+            this.addDustbin(this.table,re)
+        }
+        
         let re2 = []
         for(let key in re.rows){
             let item = re.rows[key]
@@ -64,11 +88,20 @@ module.exports = {
                     [item2.name]:item2.value
                 })
             }
-        re2.push(await client.deleteRow({
-            tableName: this.table,
-            condition: new TableStore.Condition(TableStore.RowExistenceExpectation.EXPECT_EXIST, null),
-            primaryKey: keys
-        }))
+            if (true_del) {
+                re2.push(await client.deleteRow({
+                    tableName: this.table,
+                    condition: new TableStore.Condition(TableStore.RowExistenceExpectation.EXPECT_EXIST, null),
+                    primaryKey: keys
+                }))
+            }else{
+                re2.push(await client.deleteRow({
+                    tableName: this.table,
+                    condition: new TableStore.Condition(TableStore.RowExistenceExpectation.EXPECT_EXIST, null),
+                    primaryKey: keys
+                }))
+            }
+            
         }
         // console.log(47,key_arr)
         // let re2 = 
@@ -88,7 +121,7 @@ module.exports = {
         }
         })
         console.log(169,'read',re)
-        return re
+        return this.getData('r',re)
     },
     async u(arg) {
         let client = this.client
@@ -138,20 +171,24 @@ module.exports = {
         // console.log(169,'update',re)
         let re2 = await client.batchWriteRow({
           tables: [{
-            tableName: this.table,
-            rows: rows,
-        }],
+                tableName: this.table,
+                rows: rows,
+            }],
         })
-        console.log(56,'update',re2)
-        return re
+        // console.log(152,TableStore.ReturnType);
+        // console.log(56,'update',re2.tables[0].capacityUnit)
+        return this.getData('u',re2)
     },
     where(arg) {
         this.whereValue = arg
+        let page = this.config_obj.page||this.default.page
+        let limit = this.config_obj.limit||this.default.limit
+        let count = this.config_obj.count||this.default.count
         let searchQuery = {
-            offset:(this.pageValue-1) * this.limitValue,
-        limit: this.limitValue, //如果只为了取行数，但不需要具体数据，可以设置limit=0，即不返回任意一行数据。
-        
-        getTotalCount: this.countValue // 结果中的TotalCount可以表示表中数据的总行数， 默认false不返回
+            offset:(page-1) * limit,
+            limit: limit, //如果只为了取行数，但不需要具体数据，可以设置limit=0，即不返回任意一行数据。
+            
+            getTotalCount: count// 结果中的TotalCount可以表示表中数据的总行数， 默认false不返回
         }
         
         let query = {//6

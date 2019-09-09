@@ -49,8 +49,12 @@ module.exports = async function defaultStream(db,table_name) {
     let r_data = await db(table_name).config({
         count:true
     }).where({
-        id:15679326731253020
+        id:15679326731253020,
+        // not:[
+        //     {_del:true}
+        // ]
     }).r()
+    console.log(57,r_data);
     let d_data = await db(table_name).config({
         del:true
     }).where({

@@ -5,13 +5,13 @@ module.exports = {
     setDefault(config){
         for(let key in config){
             let item = config[key]
-            console.log(5,typeof(item));
+            // console.log(5,typeof(item));
             if (typeof(item) == 'object') {
                 this.default[key] = {
                     ...this.default[key],
                     ...item
                 }
-                console.log(11,);
+                // console.log(11,);
             }else{
                 this.default[key] = item
             }
@@ -21,7 +21,7 @@ module.exports = {
 
             this.setDustbin()
         }
-        console.log(15,this.default);
+        // console.log(15,this.default);
     },
     async setDustbin(){
         let table = this.default.delete.dustbin_table_name
@@ -70,6 +70,30 @@ module.exports = {
         // let res =await 
             this.c(data)
         // console.log(71,res);
+    },
+    checkHave(check_table, have_table){
+        let re = {
+            have: [],
+            not_have: [],
+        }
+        let table_obj = {}
+        for (let key in have_table) {
+            let item = have_table[key]
+            table_obj[item] = true
+        }
+
+        let check_table_arr = check_table.split(',')
+        for (let key in check_table_arr) {
+            let item = check_table_arr[key]
+            if (table_obj[item]) {
+                re.have.push(item)
+            } else {
+                re.not_have.push(item)
+            }
+        }
+
+        re.all_have = !re.not_have.length
+        return re
     },
     test(e){
         console.log(20,this.config_obj);

@@ -61,5 +61,15 @@ module.exports = {
       
         // return re.table_names
         return this.getData('listTable',re)
-    }
+    },
+    
+    async haveTable(check_table) {
+      let have_table = await this.config({
+        data:'simple',
+      }).listTable()
+      let re = this.checkHave(check_table,have_table)
+      // return re.table_names
+      return re
+    },
+
 }

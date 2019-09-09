@@ -62,7 +62,7 @@ let where = {
         }
     },
 	like(key,val){
-        console.log(66,val);
+        // console.log(66,val);
         if ('*'==val[0]) {
             val = '?'+val
         }

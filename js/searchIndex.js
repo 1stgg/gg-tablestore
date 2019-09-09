@@ -47,10 +47,28 @@ module.exports = {
         let re = await client.listSearchIndex({
           tableName:this.table,
         })
-        console.log(9,'listSearchIndex',re)
-        // re.indices: [ { table_name: 'temp', index_name: 'temp' }
-        
-        
+        // console.log(9,'listSearchIndex',re)
         return this.getData('listIndex',re)
-    }
+    },
+    async haveIndex(check_table){
+        let have_table = await this.config({
+            data: 'simple',
+        }).listIndex()
+        check_table = check_table ? check_table : this.table
+        let re = this.checkHave(check_table, have_table)
+        // return re.table_names
+        return re
+    },
+    async getIndex(index_name) {
+        let client = this.client
+        
+        // console.log(3,schema)
+        let re = await client.describeSearchIndex({
+            tableName:this.table,
+            indexName: index_name || this.table,
+        })
+        // console.log(9,'listSearchIndex',re)
+        return re
+    },
+
 }

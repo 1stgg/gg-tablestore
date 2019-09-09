@@ -3,21 +3,13 @@ let default2 = require('./default.js')
 let client = 0
 function db_ori(table) {
 	this.client = client
-	this.table = table
-	// this.index
-	// this.whereValue
-	this.limitValue = default2.limit
-	this.pageValue = default2.page
-	this.countValue = default2.count
-
+	this.table = table || ''
+	this.index = ''
+	this.searchQuery = {}
+	this.whereValue = {}
+	
 	this.default = default2
 	this.config_obj = {}
-
-	// this.fieldValue
-	// this.fieldValue
-
-	// this.searchQuery
-	// this.columnToGet
 }
 let fileList = {
 	

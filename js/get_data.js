@@ -1,6 +1,19 @@
 module.exports = {
 
     //table
+    createTable(type,origin){
+        let re 
+        switch (type) {
+            case 'simple':
+                re = judgeErr(origin)
+                break;
+        
+            default:
+                re = origin
+                break;
+        }
+        return re
+    },
     listTable(type,origin){
         let re 
         switch (type) {
@@ -14,8 +27,47 @@ module.exports = {
         }
         return re
     },
+    deleteTable(type, origin) {
+        let re
+        switch (type) {
+            case 'simple':
+                re = judgeErr(origin)
+                break;
+
+            default:
+                re = origin
+                break;
+        }
+        return re
+    },
 
     //searchIndex
+    createIndex(type, origin) {
+        let re
+        switch (type) {
+            case 'simple':
+                re = judgeErr(origin)
+                break;
+
+            default:
+                re = origin
+                break;
+        }
+        return re
+    },
+    deleteIndex(type, origin) {
+        let re
+        switch (type) {
+            case 'simple':
+                re = judgeErr(origin)
+                break;
+
+            default:
+                re = origin
+                break;
+        }
+        return re
+    },
     listIndex(type,origin){
         let re 
         switch (type) {
@@ -125,6 +177,22 @@ function shiftType(val) {
         default:
             re = val
             break;
+    }
+    return re
+}
+function judgeErr(origin) {
+    let re = {}
+    if (origin.RequestId) {
+        re = {
+            err: 0,
+            err_msg: 'success',
+        }
+    } else {
+        re = {
+            err: 1,
+            err_msg: origin.message || 'faile',
+            err_origin: origin.code || 0,
+        }
     }
     return re
 }

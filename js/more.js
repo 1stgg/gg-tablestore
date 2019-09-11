@@ -49,8 +49,20 @@ module.exports = {
         this.config_obj = config
         return this
     },
-    getLastSql(e){
-        
+    setLastSql(api, param){
+        // let param = {
+        //     tableName: this.table
+        // }
+        // let re = await client.describeTable(param)
+        // // console.log(24,re)
+        // this.setLastSql('getTable', param)
+
+        this.last_sql.api = api
+        this.last_sql.param = param
+        // console.log(57,JSON.stringify(this.last_sql));
+    },
+    getLastSql(){
+        return this.last_sql
     },
     getData(fun_name,origin){
         let get_data = require('./get_data.js')
@@ -75,6 +87,7 @@ module.exports = {
         let re = {
             have: [],
             not_have: [],
+            json: {},
         }
         let table_obj = {}
         for (let key in have_table) {
@@ -87,8 +100,10 @@ module.exports = {
             let item = check_table_arr[key]
             if (table_obj[item]) {
                 re.have.push(item)
+                re.json[item] = true
             } else {
                 re.not_have.push(item)
+                re.json[item] = false
             }
         }
 
@@ -96,6 +111,7 @@ module.exports = {
         return re
     },
     test(e){
+        console.log(20.1,this.default);
         console.log(20,this.config_obj);
     },
 }

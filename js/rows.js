@@ -91,6 +91,9 @@ module.exports = {
                 returnContent: { returnType: TableStore.ReturnType.Primarykey }
             })
         }
+        if (!rows.length) {
+            return 
+        }
         let re2 = await client.batchWriteRow({
           tables: [{
                 tableName: this.table,

@@ -38,8 +38,8 @@ function setTempClient(client_origin) {
 					// console.log(38,err);
 					// console.log(39,data);
 					let re_so = data == null ? err : data
-					console.log(41,JSON.stringify(re_so));
-					console.log(41.1, JSON.stringify(data == null));
+					// console.log(41,JSON.stringify(re_so));
+					// console.log(41.1, JSON.stringify(data == null));
 					resolve(re_so);
 				})
 			});

@@ -114,7 +114,7 @@ module.exports = {
         switch (type) {
             case 'simple':
                 re = []
-                // console.log(60,origin);
+                console.log(60,origin);
                 for(let key in origin.tables[0].primaryKey){
                     let item = origin.tables[0].primaryKey[key]
                     re.push(shiftType(item.value.toNumber()))
@@ -189,9 +189,8 @@ function judgeErr(origin) {
         }
     } else {
         re = {
-            err: 1,
+            err: origin.code || 1,
             err_msg: origin.message || 'faile',
-            err_origin: origin.code || 0,
         }
     }
     return re

@@ -70,6 +70,10 @@ module.exports = {
       indexName: index_name || this.table,
     }
     let re = await client.describeSearchIndex(param)
+    if (re.code) {
+      re.err = re.code
+      re.err_msg = re.message
+    }
     // console.log(9,'listSearchIndex',re)
     this.setLastSql('describeSearchIndex', param)
     return re

@@ -6,14 +6,16 @@
     - ✅page,limit
     - sort
     - field
+- u()
+    - 逻辑优化
+    - inc,dec等
 - db(db_name).next(next_token) 翻页
-- allStream.js
+- allApi.js
     - ✅流程
     - 数据解析简化设置
     - getLastSql
     - 健壮性 不能操作时，报错体系
-    - u() 逻辑优化
-    - u() inc,dec等
+    
 
 # 半完成
 

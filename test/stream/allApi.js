@@ -4,25 +4,25 @@ module.exports = async function allApi(db, table_name) {
   db().setDefault({ delete: { type: 10, dustbin_type: 10, }, data: { type: 'simple', }, index: { type: 'time_random', } })
   let run = {
     table: {
-      create: true,
+      // create: true,
       // update: false,//forbidden update capacity unit
       // list: true, 
-      // // delete: true,
+      // delete: true,
       // get: true,
       // have: true,
     },
     index: {
       // create: true,
       // list: true,
-      // // delete: true,
+      // delete: true,
       // get: true,
       // have: true,
     },
     row: {
-      // c: true,
-      // u: true,
-      // r: true,
-      // d: true,
+      c: true,
+      u: true,
+      r: true,
+      d: true,
     },
     more:{
       // getLastSql:true
@@ -108,26 +108,9 @@ module.exports = async function allApi(db, table_name) {
     })
     console.log(0, 'c', JSON.stringify(c));
   }
-
-  if (run.row.u) {
-    let u = await db(table_name)
-      .where({
-        id: r.rows[r.rows.length - 1].id,
-      })
-      .u({
-        update: true
-      })
-    // https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/update_row.py
-    // update_of_attribute_columns = {
-    //     'PUT': [('name', 'David'), ('address', 'Hongkong')],
-    //     'DELETE': [('address', None, 1488436949003)],
-    //     'DELETE_ALL': [('mobile'), ('age')],
-    //     'INCREMENT': [('counter', -1)]
-    // }
-    console.log(1, 'u', JSON.stringify(u));
-  }
+  let r = {}
   if (run.row.r) {
-    let r = await db(table_name)
+    r = await db(table_name)
       .where({
         int: 233,
         and: [
@@ -143,6 +126,23 @@ module.exports = async function allApi(db, table_name) {
       })
       .r()
     console.log(2, 'r', JSON.stringify(r));
+  }
+  if (run.row.u) {
+    let u = await db(table_name)
+      .where({
+        id: 233||r.rows[r.rows.length - 1].id,
+      })
+      .u({
+        update: true
+      })
+    // https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/update_row.py
+    // update_of_attribute_columns = {
+    //     'PUT': [('name', 'David'), ('address', 'Hongkong')],
+    //     'DELETE': [('address', None, 1488436949003)],
+    //     'DELETE_ALL': [('mobile'), ('age')],
+    //     'INCREMENT': [('counter', -1)]
+    // }
+    console.log(1, 'u', JSON.stringify(u));
   }
 
 

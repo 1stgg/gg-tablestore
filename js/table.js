@@ -37,8 +37,7 @@ module.exports = {
     //   console.log(36.1, JSON.stringify(data));
     // })
     let re = await client.createTable(param)
-    console.log(24, re.code) 
-    console.log(24.1, re.message) 
+    // console.log(24, re.code)
     this.setLastSql('createTable', param)
     return this.getData('createTable', re)
   },
@@ -82,6 +81,10 @@ module.exports = {
       tableName: this.table
     }
     let re = await client.describeTable(param)
+    if (re.code) {
+      re.err = re.code
+      re.err_msg = re.message
+    }
     // console.log(24,re)
     this.setLastSql('getTable', param)
     return re

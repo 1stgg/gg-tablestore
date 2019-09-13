@@ -38,13 +38,15 @@ module.exports = {
             })
         }
         // console.log(3,key_arr)
-        let re = await client.putRow({
-          tableName: this.table,
-          condition: new TableStore.Condition(TableStore.RowExistenceExpectation.EXPECT_NOT_EXIST, null),
-          primaryKey: key_arr,
-          attributeColumns: col,
-          returnContent: { returnType: TableStore.ReturnType.Primarykey }
-        })
+        let param = {
+            tableName: this.table,
+            condition: new TableStore.Condition(TableStore.RowExistenceExpectation.EXPECT_NOT_EXIST, null),
+            primaryKey: key_arr,
+            attributeColumns: col,
+            returnContent: { returnType: TableStore.ReturnType.Primarykey }
+        }
+        let re = await client.putRow(param)
+        this.setLastSql('putRow', param)
         // console.log(169,'add',re.row.primaryKey[0].value.toNumber())
         return this.getData('c',re)
     },
@@ -57,16 +59,15 @@ module.exports = {
           indexName: this.index||this.table,
           searchQuery: this.searchQuery,
           columnToGet: { //返回列设置：RETURN_SPECIFIED(自定义),RETURN_ALL(所有列),RETURN_NONE(不返回)
-            returnType: TableStore.ColumnReturnType.RETURN_ALL
+              returnType: TableStore.ColumnReturnType.RETURN_NONE
         }
         })
         console.log()
         let col = []
         for(let key in arg){
             let item = arg[key]
-            
             col.push({
-                [key]:tableDataType(item)
+                [key]: tableDataType(item)
             })
         }
         
@@ -80,27 +81,98 @@ module.exports = {
                     [item2.name]:item2.value
                 })
             }
-            let attr = get2attr(item.attributes)
-            let colu = attr.concat(col)
-            // console.log(60,colu)
+            // let attr = get2attr(item.attributes)
+            // let colu = attr.concat(col)
+            let colu = col
+            // console.log(60, inc)
             rows.push({
-                type: 'PUT',
+                type: 'UPDATE',
                 condition: new TableStore.Condition(TableStore.RowExistenceExpectation.EXPECT_EXIST, null),
                 primaryKey: keys,
-                attributeColumns: colu,
+                attributeColumns: [
+                    { 'PUT': colu },
+                    // { 'INCREMENT': inc },
+                ],
                 returnContent: { returnType: TableStore.ReturnType.Primarykey }
             })
         }
-        if (!rows.length) {
-            return 
+        let param = {
+            tables: [{
+                tableName: this.table,
+                rows: rows,
+            }],
         }
         let re2 = await client.batchWriteRow({
-          tables: [{
+            tables: [{
                 tableName: this.table,
                 rows: rows,
             }],
         })
+
+        this.setLastSql('batchWriteRow', param)
         return this.getData('u',re2)
+    },
+
+    async dec(arg) {
+        let par = {}
+        for(let key in arg){
+            let item = arg[key]
+            par[key] = -item
+        }
+        return await this.inc(par)
+    },
+    async inc(arg) {
+        let client = this.client
+        
+        // console.log(3,key_arr)
+        let re = await client.search({
+          tableName: this.table,
+          indexName: this.index||this.table,
+          searchQuery: this.searchQuery,
+          columnToGet: { //返回列设置：RETURN_SPECIFIED(自定义),RETURN_ALL(所有列),RETURN_NONE(不返回)
+              returnType: TableStore.ColumnReturnType.RETURN_NONE
+        }
+        })
+        // console.log()
+        let col = []
+        for(let key in arg){
+            let item = arg[key]
+            col.push({
+                [key]: tableDataType(item)
+            })
+        }
+        let res = []
+        let params = []
+        let rows = []
+        for(let key in re.rows){
+            let item = re.rows[key]
+            let keys = []
+            for(let key2 in item.primaryKey){
+                let item2 = item.primaryKey[key2]
+                keys.push({
+                    [item2.name]:item2.value
+                })
+            }
+            // console.log(156, JSON.stringify(keys));
+            // console.log(156.1, JSON.stringify(col));
+            let colu = col
+            var param = {
+                tableName: this.table,
+                condition: new TableStore.Condition(TableStore.RowExistenceExpectation.EXPECT_EXIST, null),
+                primaryKey: keys,
+                updateOfAttributeColumns: [
+                    { 'INCREMENT': colu },
+                ],
+                returnContent: { returnType: TableStore.ReturnType.Primarykey }
+            };
+            let re_up = await client.updateRow(param)
+            // console.log(168,JSON.stringify(re_up));
+            res.push(re_up)
+            params.push(param)
+        }
+        
+        this.setLastSql('updateRow', params)
+        return this.getData('inc', res)
     },
     async r(arg) {
         let client = this.client
@@ -109,18 +181,81 @@ module.exports = {
         if (!this.default.delete.type) {
             searchQuery.query.query.mustNotQueries=[ { queryType: 3, query: { fieldName: '_del', term: true } }]
         }
+        if (this.config_obj.next) {
+            searchQuery.token = Buffer.from(this.config_obj.next, "base64")
+        }
         
         // console.log(3,key_arr)
-        let re = await client.search({
-          tableName: this.table,
-          indexName: this.index||this.table,
-          searchQuery: searchQuery,
-          columnToGet: { //返回列设置：RETURN_SPECIFIED(自定义),RETURN_ALL(所有列),RETURN_NONE(不返回)
-            returnType: TableStore.ColumnReturnType.RETURN_ALL
+        let param = {
+            tableName: this.table,
+            indexName: this.index || this.table,
+            searchQuery: searchQuery,
+            columnToGet: { //返回列设置：RETURN_SPECIFIED(自定义),RETURN_ALL(所有列),RETURN_NONE(不返回)
+                returnType: TableStore.ColumnReturnType.RETURN_ALL
+            }
         }
-        })
+        let re = await client.search(param)
+        this.setLastSql('search', param)
         // console.log(169,'read',re)
         return this.getData('r',re)
+    },
+    async next(stringToken) {
+        let client = this.client
+        var params = {
+            tableName: this.table,
+            indexName: this.index || this.table,
+            searchQuery: {
+                offset: 0,
+                limit: 10,
+                token: null,//获取nextToken作为下一页起点（数据类型字节流）
+                query: {
+                    queryType: TableStore.QueryType.MATCH_ALL_QUERY
+                },
+                getTotalCount: true
+            },
+            columnToGet: {
+                returnType: TableStore.ColumnReturnType.RETURN_NONE,
+            }
+        };
+
+        /**
+         * 同步示例：基于token实现的翻页
+         */
+        (async () => { //同步示例代码
+            try {
+                var data = await client.search(params);
+                console.log(224,data);
+                let stringToken = data.nextToken.toString("base64", data.nextToken.offset, data.nextToken.limit);
+                // while (data.nextToken) { //如果存在nextToken，说明还有数据
+                params.searchQuery.token = Buffer.from(stringToken, "base64");// 翻页更新token值
+                    data = await client.search(params);
+                    console.log(230,data);
+                // }
+            } catch (error) {
+                console.log(error);
+            }
+        })()
+        return
+        console.log(236, JSON.stringify(stringToken));
+        let param = {
+            tableName: this.table,
+            indexName: this.index || this.table,
+            searchQuery: {
+                token: new Buffer(stringToken, "base64"),//获取nextToken作为下一页起点（数据类型字节流）
+                query: {
+                    queryType: TableStore.QueryType.MATCH_ALL_QUERY
+                },
+                getTotalCount: this.config_obj.count || this.default.count
+            },
+            columnToGet: { //返回列设置：RETURN_SPECIFIED(自定义),RETURN_ALL(所有列),RETURN_NONE(不返回)
+                returnType: TableStore.ColumnReturnType.RETURN_ALL
+            }
+        }
+        let re = await client.search(param)
+        this.setLastSql('search', param)
+        console.log(217, 'token', stringToken)
+        console.log(169,'read',re)
+        return this.getData('r', re)
     },
     async d() {
         
@@ -147,7 +282,7 @@ module.exports = {
         }
         // console.log(47,key_arr)
         // let re2 = 
-        console.log(56,'delete',re2)
+        // console.log(56,'delete',re2)
         return re2
     },
     async true_del() {
@@ -184,16 +319,18 @@ module.exports = {
                 returnContent: { returnType: TableStore.ReturnType.Primarykey }
             })
         }
-        let re2 = await client.batchWriteRow({
-          tables: [{
+        let param = {
+            tables: [{
                 tableName: this.table,
                 rows: rows,
             }],
-        })
+        }
+        let re2 = await client.batchWriteRow(param)
         let dustbin_type = this.default.delete.dustbin_type
         if (dustbin_type== 20 || (dustbin_type == 10)) {
             this.addDustbin(this.table,re)
         }
+        this.setLastSql('batchWriteRow', param)
         return this.getData('u',re2)
     },
     

@@ -114,11 +114,19 @@ module.exports = {
         switch (type) {
             case 'simple':
                 re = []
-                console.log(60,origin);
-                for(let key in origin.tables[0].primaryKey){
-                    let item = origin.tables[0].primaryKey[key]
-                    re.push(shiftType(item.value.toNumber()))
+                // console.log(60,origin);
+                if (origin.code > 0) {
+                    re = []
+                    break
                 }
+                for (let key_tb in origin.tables){
+                    let item_tb = origin.tables[key_tb]
+                    for (let key in item_tb.primaryKey) {
+                        let item = item_tb.primaryKey[key]
+                        re.push(shiftType(item.value.toNumber()))
+                    }
+                }
+                
                 break;
         
             default:
@@ -130,6 +138,9 @@ module.exports = {
     r(type,origin){
         let re = {}
         let rows = []
+        if (origin.nextToken) {
+            origin.nextToken = origin.nextToken.toString("base64", origin.nextToken.offset, origin.nextToken.limit)
+        }
         switch (type) {
             case 'simple':
                 for(let key in origin.rows){
@@ -148,7 +159,7 @@ module.exports = {
                     // console.log(100,rows);
                 }
                 re = {
-                    next:origin.nextToken,
+                    next: origin.nextToken,
                     rows:rows,
                 }
                 if (origin.totalCounts) {
@@ -156,6 +167,37 @@ module.exports = {
                 }
                 break;
         
+            default:
+                re = origin
+                break;
+        }
+        return re
+    },
+    inc(type, origin) {
+        let re
+        switch (type) {
+            case 'simple':
+                // console.log(179,JSON.stringify(origin));
+                // console.log(179, JSON.stringify(origin.row));
+                for(let key_or in origin){
+                    re = []
+                    let item_or = origin[key_or]
+                    // console.log(182,JSON.stringify(item));
+                    // if (item_or.row.primaryKey.length >1) {
+                    //     res = []
+                    //     for (let key in item_or.row.primaryKey) {
+                    //         let item = item_or.row.primaryKey[key]
+                    //         res.push(shiftType(item.value))
+                    //     }
+                    // } else {
+                        res = shiftType(item_or.row.primaryKey[0].value)
+                    // }
+                    re.push(res)
+                }
+                
+
+                break;
+
             default:
                 re = origin
                 break;

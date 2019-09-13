@@ -74,6 +74,43 @@ let where = {
             }
         }
     },
+	geo(key,val){
+        let re = {}
+        if (val.length == 2) {
+            if (typeof(val[1]) == 'number') {
+                // distance
+                re = { // 设置查询类型为GeoDistanceQuery
+                    queryType: TableStore.QueryType.GEO_DISTANCE_QUERY,
+                    query: {
+                        fieldName: key,
+                        centerPoint: val[0], // 设置中心点
+                        distance: val[1] // 设置到中心点的距离条件，不超过10000米
+                    }
+                }
+            }else{
+                // box
+                re = { // 设置查询类型为GeoBoundingBoxQuery
+                    queryType: TableStore.QueryType.GEO_BOUNDING_BOX_QUERY,
+                    query: {
+                        fieldName: key, // 设置比较哪个字段的值
+                        topLeft: val[0], // 设置矩形左上角(纬度,经度)
+                        bottomRight: val[1] // 设置矩形右下角(纬度,经度)
+                    }
+                }
+                
+            }
+        }else{
+            // ploy
+            re = { // 设置查询类型为GeoPolygonQuery
+                queryType: TableStore.QueryType.GEO_POLYGON_QUERY,
+                query: {
+                    fieldName: key,
+                    points: val // 设置多边形的顶点
+                }
+            }
+        }
+        return re
+    },
     getQuery(key,val){
         let re = {}
         
@@ -97,6 +134,9 @@ let where = {
                    break;
                case 'like':
                    re = where.like(key,val[1])
+                   break;
+               case 'geo':
+                   re = where.geo(key,val[1])
                    break;
            
                default:

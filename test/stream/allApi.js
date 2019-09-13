@@ -19,10 +19,13 @@ module.exports = async function allApi(db, table_name) {
       // have: true,
     },
     row: {
-      c: true,
-      u: true,
+      // c: true,
+      // u: true,
       r: true,
-      d: true,
+      // d: true,
+      // inc: true,
+      // dec: true,
+      // next: true,
     },
     more:{
       // getLastSql:true
@@ -75,6 +78,7 @@ module.exports = async function allApi(db, table_name) {
       int: 'int',
       bool: 'bool',
       str: 'str',
+      latlng: 'geo',
     })
     console.log(0, 'create_index', JSON.stringify(create_index));
   }
@@ -105,55 +109,96 @@ module.exports = async function allApi(db, table_name) {
       int: 233,
       bool: false,
       str: 'asmr',
+      latlng: '23.093601,113.242871',
     })
     console.log(0, 'c', JSON.stringify(c));
   }
   let r = {}
   if (run.row.r) {
-    r = await db(table_name)
-      .where({
-        int: 233,
-        and: [
-          { bool: false },
-          { id: ['>', 233] },
-        ],
-        or: [
-          { str: ['like', '*s*'], bool: true }
-        ],
-        not: [
-          { _del: true }
-        ]
-      })
-      .r()
-    console.log(2, 'r', JSON.stringify(r));
+    let next_fun =  async(next)=>{
+
+      r = await db(table_name)
+        .config({
+          next: next,
+        })
+        .where({
+          // id: ['>', 233],
+          latlng: ['geo', ['23.093601,113.242871', 10]],
+          // int: 233,
+          // and: [
+          //   { bool: false },
+          //   { id: ['>', 233] },
+          // ],
+          or: [
+            { str: ['like', '*s*'] },
+            // { latlng: ['geo', ['23.09360,113.24287', '23.093602,113.242872']], },//box
+            // { latlng: ['geo', ['23.093601,113.242871', 10]], },// distance
+            // { latlng: ['geo', ['23.09360,113.24287', '23.093602,113.242872', '23.093602,113.24287', '23.09360,113.242872']], },
+          ],
+          // not: [
+          //   { _del: true }
+          // ]
+        })
+        .r()
+        console.log(142,JSON.stringify(db().getLastSql()));
+      if (next) {
+        console.log(2.1, 'next', JSON.stringify(r));
+      }else{
+        console.log(2, 'r', JSON.stringify(r));
+      }
+      
+    }
+    await next_fun(null)
+    if (run.row.next) {
+      // console.log(141, JSON.stringify(r));
+      next_fun(r.next)
+    }
   }
   if (run.row.u) {
     let u = await db(table_name)
       .where({
-        id: 233||r.rows[r.rows.length - 1].id,
+        id: ['>', 1568358132440812]||1568358132440812||r.rows[r.rows.length - 1].id,
       })
       .u({
-        update: true
-      })
-    // https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/update_row.py
-    // update_of_attribute_columns = {
-    //     'PUT': [('name', 'David'), ('address', 'Hongkong')],
-    //     'DELETE': [('address', None, 1488436949003)],
-    //     'DELETE_ALL': [('mobile'), ('age')],
-    //     'INCREMENT': [('counter', -1)]
-    // }
+        update: true,
+      }) 
     console.log(1, 'u', JSON.stringify(u));
   }
 
 
   if (run.row.d) {
     let d = await db(table_name)
+      .config({
+        del:true
+      })
       .where({
-        id: r.rows[0].id,
+        id: ['>', 1568358132440812]|| r.rows[0].id,
       })
       .d()
     console.log(3, JSON.stringify(d));
 
+  }
+
+  if (run.row.inc) {
+    let inc = await db(table_name)
+      .where({
+        id: 1568358132440812 || r.rows[0].id,
+      })
+      .inc({
+        int: 2,
+      })
+    console.log(1.1, 'inc', JSON.stringify(inc));
+  }
+
+  if (run.row.dec) {
+    let dec = await db(table_name)
+      .where({
+        id: 1568378756084487 ||r.rows[1].id,
+      })
+      .dec({
+        int: 2,
+      })
+    console.log(1.2, 'dec', JSON.stringify(dec));
   }
 
   // more

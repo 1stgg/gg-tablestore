@@ -1,26 +1,26 @@
 
 # todo
 
-
+- geo类型
 - config
     - ✅page,limit
+    - ✅next
     - sort
     - field
-- u()
-    - 逻辑优化
-    - inc,dec等
-- db(db_name).next(next_token) 翻页
-- allApi.js
-    - ✅流程
-    - 数据解析简化设置
-    - getLastSql
-    - 健壮性 不能操作时，报错体系
     
 
 # 半完成
 
 
 # 已完成
+- ✅u()
+    - ✅逻辑优化
+    - ✅inc,dec等
+- ✅allApi.js
+    - ✅流程
+    - ✅数据解析简化设置
+    - ✅getLastSql
+    - ✅健壮性 不能操作时，报错体系
 - ✅haveTable('a,b') 检查是否有这些表 返回值{all_have:true,have:['a','b'],not_have:[]}
 - ✅假删除设置
     - ✅是否允许单独开启真删除

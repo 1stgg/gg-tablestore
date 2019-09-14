@@ -120,27 +120,33 @@ module.exports = async function allApi(db, table_name) {
       r = await db(table_name)
         .config({
           next: next,
+          sort: {
+            latlng: ['geo', ['23.093601,113.242871'], 'desc'],
+            id :'desc',
+          },
+          column:'str,id'
         })
         .where({
-          // id: ['>', 233],
-          latlng: ['geo', ['23.093601,113.242871', 10]],
+          id: ['>', 233],
+          latlng: ['geo', ['23.093601,113.242871', 10000]],
           // int: 233,
           // and: [
           //   { bool: false },
           //   { id: ['>', 233] },
           // ],
-          or: [
-            { str: ['like', '*s*'] },
-            // { latlng: ['geo', ['23.09360,113.24287', '23.093602,113.242872']], },//box
-            // { latlng: ['geo', ['23.093601,113.242871', 10]], },// distance
-            // { latlng: ['geo', ['23.09360,113.24287', '23.093602,113.242872', '23.093602,113.24287', '23.09360,113.242872']], },
-          ],
+          // or: [
+          //   { str: ['like', '*s*'], bool: true },
+          //   { latlng: ['geo', ['23.093600,113.242870', '23.093602,113.242872']] },//box
+          //   { latlng: ['geo', ['23.093601,113.242871', 10]], },// distance
+          //   { latlng: ['geo', ['23.09360,113.24287', '23.093602,113.242872', '23.093602,113.24287', '23.09360,113.242872']], },
+          // ],
           // not: [
-          //   { _del: true }
+          //   { _del: true },
           // ]
         })
-        .r()
-        console.log(142,JSON.stringify(db().getLastSql()));
+        .r() 
+        // console.log(142,JSON.stringify(db().getLastSql(),null,4));
+        console.log(JSON.stringify(db().getLastSql(),null,2));
       if (next) {
         console.log(2.1, 'next', JSON.stringify(r));
       }else{
@@ -204,7 +210,7 @@ module.exports = async function allApi(db, table_name) {
   // more
   if (run.more.getLastSql) {
     let get_last_sql = db().getLastSql()
-    console.log(2,'get_last_sql', JSON.stringify(get_last_sql));
+    console.log(2,'get_last_sql', JSON.stringify(get_last_sql,null,4));
 
   }
   // db().test()

@@ -89,12 +89,20 @@ let where = {
                 }
             }else{
                 // box
+                // console.log(92,JSON.stringify(val));
+                let arr0 = val[0].split(',')
+                let arr1 = val[1].split(',')
+                let lat_arr = arr0[0] > arr1[0] ? [arr1[0],arr0[0]] : [arr0[0],arr1[0]]
+                let lng_arr = arr0[1] > arr1[1] ? [arr1[1],arr0[1]] : [arr0[1],arr1[1]]
+                // console.log(96, JSON.stringify([arr0[0],arr1[0]]));
+                // console.log(96.1, JSON.stringify(arr0[0] > arr1[0]));
+                // let lng_arr = arr0[1] > arr1[1] ? `${arr1[1]},${arr0[1]}` : `${arr0[1]},${arr1[1]}`
                 re = { // 设置查询类型为GeoBoundingBoxQuery
                     queryType: TableStore.QueryType.GEO_BOUNDING_BOX_QUERY,
                     query: {
                         fieldName: key, // 设置比较哪个字段的值
-                        topLeft: val[0], // 设置矩形左上角(纬度,经度)
-                        bottomRight: val[1] // 设置矩形右下角(纬度,经度)
+                        topLeft: `${lat_arr[1]},${lng_arr[0]}`, // 设置矩形左上角(纬度,经度)
+                        bottomRight: `${lat_arr[0]},${lng_arr[1]}` // 设置矩形右下角(纬度,经度)
                     }
                 }
                 
@@ -184,11 +192,11 @@ let where = {
                             bool.mustQueries = where.obj2origin(item2)
                         break;
                     case 'or':
-                            bool.shouldQueries = where.obj2origin(item2)
+                        bool.shouldQueries = where.obj2origin(item2)
+                        bool.minimumShouldMatch = 1
                         break;
                     case 'not':
                             bool.mustNotQueries = where.obj2origin(item2)
-                            bool.minimumShouldMatch = 1
                         break;
                 
                     default:

@@ -112,5 +112,5 @@ let up_status = await db(db_name).where({
 |page|列表返回第几页,翻页建议使用next()|int类型|
 |next|r() 返回的next|str类型|
 |limit|每页返回几行数据|int类型|
-|sort|排序|{a:'asc',latlng:['geo',[25.002,120.001],'desc']}|
-|field|返回哪些字段|'a,latlng'|
+|sort|排序|{a:'asc',latlng:['geo',['25.002,120.001'],'desc']}|
+|column|返回哪些字段|'a,latlng'|

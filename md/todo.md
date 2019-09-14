@@ -1,18 +1,18 @@
 
 # todo
 
-- geo类型
-- config
-    - ✅page,limit
-    - ✅next
-    - sort
-    - field
-    
 
 # 半完成
 
 
 # 已完成
+- ✅config
+    - ✅page,limit
+    - ✅next
+    - ✅sort
+    - ✅column
+    
+- ✅geo类型
 - ✅u()
     - ✅逻辑优化
     - ✅inc,dec等

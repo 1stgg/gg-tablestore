@@ -161,6 +161,8 @@ module.exports = {
                 re = {
                     next: origin.nextToken,
                     rows:rows,
+                    err: origin.code || 0,
+                    err_msg: origin.message || 'success',
                 }
                 if (origin.totalCounts) {
                     re.count = parseInt(origin.totalCounts)

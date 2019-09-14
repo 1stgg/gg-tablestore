@@ -190,72 +190,13 @@ module.exports = {
             tableName: this.table,
             indexName: this.index || this.table,
             searchQuery: searchQuery,
-            columnToGet: { //返回列设置：RETURN_SPECIFIED(自定义),RETURN_ALL(所有列),RETURN_NONE(不返回)
-                returnType: TableStore.ColumnReturnType.RETURN_ALL
-            }
+            columnToGet: getColumn(this.config_obj.column)
         }
         let re = await client.search(param)
         this.setLastSql('search', param)
         // console.log(169,'read',re)
+        // console.log(200,JSON.stringify(re));
         return this.getData('r',re)
-    },
-    async next(stringToken) {
-        let client = this.client
-        var params = {
-            tableName: this.table,
-            indexName: this.index || this.table,
-            searchQuery: {
-                offset: 0,
-                limit: 10,
-                token: null,//获取nextToken作为下一页起点（数据类型字节流）
-                query: {
-                    queryType: TableStore.QueryType.MATCH_ALL_QUERY
-                },
-                getTotalCount: true
-            },
-            columnToGet: {
-                returnType: TableStore.ColumnReturnType.RETURN_NONE,
-            }
-        };
-
-        /**
-         * 同步示例：基于token实现的翻页
-         */
-        (async () => { //同步示例代码
-            try {
-                var data = await client.search(params);
-                console.log(224,data);
-                let stringToken = data.nextToken.toString("base64", data.nextToken.offset, data.nextToken.limit);
-                // while (data.nextToken) { //如果存在nextToken，说明还有数据
-                params.searchQuery.token = Buffer.from(stringToken, "base64");// 翻页更新token值
-                    data = await client.search(params);
-                    console.log(230,data);
-                // }
-            } catch (error) {
-                console.log(error);
-            }
-        })()
-        return
-        console.log(236, JSON.stringify(stringToken));
-        let param = {
-            tableName: this.table,
-            indexName: this.index || this.table,
-            searchQuery: {
-                token: new Buffer(stringToken, "base64"),//获取nextToken作为下一页起点（数据类型字节流）
-                query: {
-                    queryType: TableStore.QueryType.MATCH_ALL_QUERY
-                },
-                getTotalCount: this.config_obj.count || this.default.count
-            },
-            columnToGet: { //返回列设置：RETURN_SPECIFIED(自定义),RETURN_ALL(所有列),RETURN_NONE(不返回)
-                returnType: TableStore.ColumnReturnType.RETURN_ALL
-            }
-        }
-        let re = await client.search(param)
-        this.setLastSql('search', param)
-        console.log(217, 'token', stringToken)
-        console.log(169,'read',re)
-        return this.getData('r', re)
     },
     async d() {
         
@@ -345,6 +286,11 @@ module.exports = {
             
             getTotalCount: count// 结果中的TotalCount可以表示表中数据的总行数， 默认false不返回
         }
+        if (this.config_obj.sort) {
+            searchQuery.sort = {
+                sorters: getSort(this.config_obj.sort)
+            }
+        }
         
         let query = {//6
             queryType: TableStore.QueryType.BOOL_QUERY,
@@ -360,4 +306,64 @@ module.exports = {
         return this
     }
     
+}
+function getSort(sort) {
+    let re = []
+    for(let key in sort){
+        let item = sort[key]
+        if (item.constructor == Array) {
+            switch (item[0]) {
+                case 'geo':
+                    re.push({
+                        geoDistanceSort: {
+                            fieldName: key,
+                            points: item[1],//设置中心点
+                            order: getSortOrder(item[2])
+                        }
+                    })
+                    break;
+            
+                default:
+                    break;
+            }
+        }else{
+            re.push({
+                fieldSort: {
+                    fieldName: key,
+                    order: getSortOrder(item)
+                }
+            })
+        }
+        
+    }
+    return re
+}
+function getSortOrder(str) {
+    let re = TableStore.SortOrder.SORT_ORDER_DESC
+    switch (str) {
+        case 'asc':
+            re = TableStore.SortOrder.SORT_ORDER_ASC
+            break;
+    
+        default:
+            break;
+    }
+    return re
+}
+
+function getColumn(column) {
+    let re = {}
+    if (!column) {
+        re = { //返回列设置：RETURN_SPECIFIED(自定义),RETURN_ALL(所有列),RETURN_NONE(不返回)
+            returnType: TableStore.ColumnReturnType.RETURN_ALL,
+        }
+    }else{
+        re = { //返回列设置：RETURN_SPECIFIED(自定义),RETURN_ALL(所有列),RETURN_NONE(不返回)
+            // returnType: TableStore.ColumnReturnType.RETURN_ALL,
+            returnType: TableStore.ColumnReturnType.RETURN_SPECIFIED,
+            returnNames: column.split(',')
+        }
+    }
+
+    return re
 }

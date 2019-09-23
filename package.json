@@ -1,6 +1,6 @@
 {
   "name": "gg-tablestore",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "链式操作查询tablestore,详情见 [GitHub](https://github.com/1stgg/gg-tablestore)",
   "main": "index.js",
   "directories": {

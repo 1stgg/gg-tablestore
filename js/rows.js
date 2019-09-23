@@ -178,13 +178,15 @@ module.exports = {
         let client = this.client
         let searchQuery = this.searchQuery
         // console.log(105,searchQuery.query.query.mustQueries[1].query.mustNotQueries[0].query);
-        if (!this.default.delete.type) {
+        // console.log(181, this.default.delete.type);
+        if (this.default.delete.type != 0 || this.config_obj.del) {
+            // console.log(182,1);
             searchQuery.query.query.mustNotQueries=[ { queryType: 3, query: { fieldName: '_del', term: true } }]
         }
         if (this.config_obj.next) {
             searchQuery.token = Buffer.from(this.config_obj.next, "base64")
         }
-        
+        // console.log(187, searchQuery);
         // console.log(3,key_arr)
         let param = {
             tableName: this.table,
@@ -297,7 +299,7 @@ module.exports = {
             query: {
                 mustQueries:wherejs.obj2origin(this.whereValue)
             }
-    }
+        }
     
         searchQuery.query = query
         // console.log(22,query)

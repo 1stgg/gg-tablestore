@@ -28,7 +28,7 @@ module.exports = async function allApi(db, table_name) {
       // next: true,
     },
     more:{
-      // getLastSql:true
+      getLastSql:true
     }
   }
   // table
@@ -210,7 +210,7 @@ module.exports = async function allApi(db, table_name) {
   // more
   if (run.more.getLastSql) {
     let get_last_sql = db().getLastSql()
-    console.log(2,'get_last_sql', JSON.stringify(get_last_sql,null,4));
+    console.log('get_last_sql', JSON.stringify(get_last_sql,null,2));
 
   }
   // db().test()

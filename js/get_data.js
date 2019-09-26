@@ -113,17 +113,33 @@ module.exports = {
         let re 
         switch (type) {
             case 'simple':
-                re = []
+                let rows = []
                 // console.log(60,origin);
                 if (origin.code > 0) {
-                    re = []
+                    rows = []
                     break
                 }
                 for (let key_tb in origin.tables){
                     let item_tb = origin.tables[key_tb]
+                    let row = {}
                     for (let key in item_tb.primaryKey) {
                         let item = item_tb.primaryKey[key]
-                        re.push(shiftType(item.value.toNumber()))
+                        
+                        row[item.name] = shiftType(item.value)
+                    }
+                    rows.push(row)
+                }
+                if (rows.length > 0) {
+                    re = {
+                        err:0,
+                        err_msg:'更新成功！',
+                        rows
+                    }
+                }else{
+                    re = {
+                        err: origin.code || 1,
+                        err_msg: origin.message || '更新失败！',
+                        rows
                     }
                 }
                 

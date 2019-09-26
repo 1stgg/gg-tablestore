@@ -21,14 +21,14 @@ module.exports = async function allApi(db, table_name) {
     row: {
       // c: true,
       // u: true,
-      r: true,
-      // d: true,
+      // r: true,
+      d: true,
       // inc: true,
       // dec: true,
       // next: true,
     },
     more:{
-      getLastSql:true
+      // getLastSql:true
     }
   }
   // table

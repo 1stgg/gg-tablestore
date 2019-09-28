@@ -19,10 +19,10 @@ module.exports = async function allApi(db, table_name) {
       // have: true,
     },
     row: {
-      // c: true,
+      c: true,
       // u: true,
       // r: true,
-      d: true,
+      // d: true,
       // inc: true,
       // dec: true,
       // next: true,

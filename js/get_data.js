@@ -91,16 +91,29 @@ module.exports = {
         let re 
         switch (type) {
             case 'simple':
-                if (origin.row.primaryKey.length) {
-                    re = []
-                    for(let key in origin.row.primaryKey){
-                        let item = origin.row.primaryKey[key]
-                        re.push(shiftType(item.value))
-                    }
-                }else{
-                    re = shiftType(origin.row.primaryKey[0].value)
+                let rows = []
+                let row 
+                for (let key in origin.row.primaryKey) {
+                    row = {}
+                    let item = origin.row.primaryKey[key]
+                    // re.push(shiftType(item.value))
+                    row[item.name] = shiftType(item.value)
                 }
                 
+                if (row) {
+                    re = {
+                        err:0,
+                        err_msg:'添加成功',
+                        rows:[row]
+                    }
+                } else {
+                    re = {
+                        err: origin.code || 1,
+                        err_msg: '添加失败',
+                        err_msg_origin: origin.message,
+                        rows: []
+                    }
+                }
                 break;
         
             default:
@@ -137,9 +150,10 @@ module.exports = {
                     }
                 }else{
                     re = {
+                        rows,
                         err: origin.code || 1,
-                        err_msg: origin.message || '更新失败！',
-                        rows
+                        err_msg: '更新失败！',
+                        err_msg_origin: origin.message,
                     }
                 }
                 
